@@ -5,6 +5,9 @@
   "author": "Rizul",
   "license": "ISC",
   "description": "",
+  "scripts": { 
+    "start": "node app.js"
+},
   "dependencies": {
     "body-parser": "^2.2.0",
     "ejs": "^3.1.10",
