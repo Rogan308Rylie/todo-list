@@ -1,0 +1,13 @@
+{
+  "name": "assignment-7",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Rizul",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0"
+  }
+}
