@@ -1,29 +1,24 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Todo list</title>
-    </head>
-
-    <body>
-        <div class="box">
-            <h1>Todo List</h1>
-            <link rel="stylesheet" href="css\styles.css">
+<head>
+    <title>Todo list</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="box">
+        <h1>Todo List</h1>
+    </div>
+    <div class="box">
+        <% for(var i = 0; i < ejes.length; i++){%>
+        <div class="item">
+            <input type="checkbox">
+            <p><%=ejes[i] %></p>
         </div>
-
-        <div class="box">
-            <% for(var i = 0; i < ejes.length; i++){%>
-                <div class="item">
-                    <input type="checkbox">
-                    <p><%=ejes[i] %></p>
-                </div>
-                
-            <% }%>
-            <form action="/" method="POST">
+        <% }%>
+        <form action="/" method="POST">
             <input type="text" name="ele1" placeholder="Enter the task">
             <button type="submit">+</button>
         </form>
-        
-        </div>
-
-    </body>
+    </div>
+</body>
 </html>
