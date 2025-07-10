@@ -10,13 +10,17 @@ var items = [];
 var ex = "working";
 
 app.get("/", function(req,res){
-    items = []; // Clear the items array on every page load/refresh
     res.render("list", {ejes : items});
 });
 
 app.post("/", function(req,res){
     var item = req.body.ele1;
     items.push(item);
+    res.redirect("/");
+});
+
+app.post("/clear", function(req,res){
+    items = []; // Clear all tasks
     res.redirect("/");
 });
 
