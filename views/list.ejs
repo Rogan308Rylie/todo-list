@@ -3,6 +3,25 @@
 <head>
     <title>Todo list</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .clear-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .clear-btn {
+            background-color: #f5f5dc;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .clear-btn:hover {
+            background-color: #f0f0d0;
+        }
+    </style>
 </head>
 <body>
     <div class="box">
@@ -19,8 +38,8 @@
             <input type="text" name="ele1" placeholder="Enter the task">
             <button type="submit">+</button>
         </form>
-        <form action="/clear" method="POST">
-            <button type="submit">Clear all tasks</button>
+        <form action="/clear" method="POST" class="clear-form">
+            <button type="submit" class="clear-btn">Clear all tasks</button>
         </form>
     </div>
 </body>
