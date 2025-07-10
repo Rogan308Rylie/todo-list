@@ -20,7 +20,7 @@ app.post("/", function(req,res){
 });
 
 app.post("/clear", function(req,res){
-    items = []; // Clear all tasks
+    items = []; 
     res.redirect("/");
 });
 
