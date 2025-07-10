@@ -17,16 +17,19 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (res.ok) {
-        // Add item to DOM
+    const data = await res.json();
+    if (data.success) {
         const div = document.createElement("div");
         div.className = "item";
         div.innerHTML = `
           <input type="checkbox">
-          <p>${item}</p>
+          <p>${data.item}</p>
         `;
         listBox.insertBefore(div, form);
         input.value = "";
-      } else {
+    }
+}
+ else {
         console.error("Failed to add item");
       }
     } catch (err) {

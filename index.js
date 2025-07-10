@@ -11,15 +11,16 @@ app.get("/", function (req, res) {
     res.render("list", { ejes: items });
 });
 
-app.post("/", function (req, res) {
+app.post("/", function(req,res){
     const item = req.body.ele1;
     if (item && item.trim() !== "") {
         items.push(item);
-        res.sendStatus(200);  // important: just send 200 for AJAX
+        res.json({ success: true, item });  // send back the added item
     } else {
-        res.sendStatus(400);
+        res.status(400).json({ success: false });
     }
 });
+
 
 const port = process.env.PORT || 4000;
 app.listen(port, function () {
