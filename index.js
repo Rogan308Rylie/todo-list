@@ -1,10 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
 var app = express();
 
 app.set("view engine", "ejs");
 app.use(express.static('public'));
 app.use(express.urlencoded({extended:true}));
+app.use(methodOverride('_method')); // Enable method override
 
 var items = [];
 var ex = "working";
@@ -19,8 +21,8 @@ app.post("/", function(req,res){
     res.redirect("/");
 });
 
-app.post("/clear", function(req,res){
-    items = []; 
+app.delete("/clear", function(req,res){
+    items = []; // Clear all tasks using DELETE method
     res.redirect("/");
 });
 
