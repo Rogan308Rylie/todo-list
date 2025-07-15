@@ -1,48 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Todo list</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
     <link rel="stylesheet" href="css/styles.css">
-    <style>
-        .clear-form {
-            text-align: center;
-            margin-top: 20px;
-        }
-        .clear-btn {
-            background-color: #f5f5dc;
-            color: black;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-            white-space: nowrap;
-            min-width: 140px;
-        }
-        .clear-btn:hover {
-            background-color: #f0f0d0;
-        }
-    </style>
 </head>
 <body>
-    <div class="box">
-        <h1>Todo List</h1>
-    </div>
-    <div class="box">
-        <% for(var i = 0; i < ejes.length; i++){%>
-        <div class="item">
-            <input type="checkbox">
-            <p><%=ejes[i] %></p>
+    <header class="header">
+        <div class="container">
+            <h1>My Todo List</h1>
+            <p>Stay organized and productive</p>
         </div>
-        <% }%>
-        <form action="/" method="POST">
-            <input type="text" name="ele1" placeholder="Enter the task">
-            <button type="submit">+</button>
-        </form>
-        <form action="/clear?_method=DELETE" method="POST" class="clear-form">
-            <button type="submit" class="clear-btn">Clear all tasks</button>
-        </form>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="box">
+                <h2>Your Tasks</h2>
+                
+                
+                <div class="filter-section">
+                    <h3>Filter by Priority:</h3>
+                    <div class="filter-buttons">
+                        <a href="/" class="filter-btn <%= currentFilter === 'all' ? 'active' : '' %>">All (<%= allItems.length %>)</a>
+                        <a href="/?filter=high" class="filter-btn <%= currentFilter === 'high' ? 'active' : '' %>">High (<%= allItems.filter(item => item.priority === 'high').length %>)</a>
+                        <a href="/?filter=medium" class="filter-btn <%= currentFilter === 'medium' ? 'active' : '' %>">Medium (<%= allItems.filter(item => item.priority === 'medium').length %>)</a>
+                        <a href="/?filter=low" class="filter-btn <%= currentFilter === 'low' ? 'active' : '' %>">Low (<%= allItems.filter(item => item.priority === 'low').length %>)</a>
+                    </div>
+                </div>
+                
+                
+                <div class="todo-creation">
+                    <h3>Add New Task</h3>
+                    <form action="/" method="POST" id="todoForm">
+                        <div class="input-group">
+                            <input type="text" name="ele1" id="taskInput" placeholder="Enter your task here..." required>
+                            <select name="priority" id="prioritySelect">
+                                <option value="low">Low Priority</option>
+                                <option value="medium" selected>Medium Priority</option>
+                                <option value="high">High Priority</option>
+                            </select>
+                            <button type="submit" id="addBtn">Add Task</button>
+                        </div>
+                    </form>
+                </div>
+                
+                
+                <div class="todo-items">
+                    <% if(ejes.length === 0) { %>
+                        <div class="empty-state">
+                            <p>No tasks found. Add a new task to get started!</p>
+                        </div>
+                    <% } else { %>
+                        <% for(var i = 0; i < ejes.length; i++){ %>
+                        <div class="item" data-priority="<%= ejes[i].priority %>">
+                            <div class="item-content">
+                                <span class="priority-badge priority-<%= ejes[i].priority %>"><%= ejes[i].priority.toUpperCase() %></span>
+                                <p class="task-text"><%= ejes[i].text %></p>
+                            </div>
+                            <div class="item-actions">
+                                <button class="edit-btn" onclick="editTask(<%= ejes[i].id %>, '<%= ejes[i].text %>', '<%= ejes[i].priority %>')">Edit</button>
+                                <form action="/delete/<%= ejes[i].id %>" method="POST" style="display: inline;">
+                                    <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Edit Task</h3>
+            <form id="editForm" method="POST">
+                <div class="input-group">
+                    <input type="text" name="editText" id="editTaskInput" placeholder="Edit your task..." required>
+                    <select name="editPriority" id="editPrioritySelect">
+                        <option value="low">Low Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="high">High Priority</option>
+                    </select>
+                    <button type="submit">Update Task</button>
+                </div>
+            </form>
+        </div>
     </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Todo List App. Stay productive and organized!</p>
+            <p>Built with Express.js and EJS</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('todoForm').addEventListener('submit', function(e) {
+            const taskInput = document.getElementById('taskInput');
+            if (!taskInput.value.trim()) {
+                e.preventDefault();
+                alert('Please enter a task before adding!');
+                taskInput.focus();
+            }
+        });
+
+        
+        function editTask(id, text, priority) {
+            const modal = document.getElementById('editModal');
+            const editForm = document.getElementById('editForm');
+            const editInput = document.getElementById('editTaskInput');
+            const editPrioritySelect = document.getElementById('editPrioritySelect');
+            
+            editForm.action = '/edit/' + id;
+            editInput.value = text;
+            editPrioritySelect.value = priority;
+            modal.style.display = 'block';
+        }
+
+        
+        document.querySelector('.close').onclick = function() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('editModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            const editInput = document.getElementById('editTaskInput');
+            if (!editInput.value.trim()) {
+                e.preventDefault();
+                alert('Please enter a task before updating!');
+                editInput.focus();
+            }
+        });
+    </script>
 </body>
 </html>
