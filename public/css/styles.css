@@ -79,7 +79,7 @@ body {
     padding: 1rem;
     background: rgba(166, 131, 227, 0.1);
     border-radius: 5px;
-    border: 1px solid rgba(166, 131, 227, 0.2);
+    border: 1px solid rgba(166, 131, 227, 0.3);
 }
 
 .filter-section h3 {
@@ -127,7 +127,7 @@ body {
     border-radius: 5px;
     padding: 1.5rem;
     margin-bottom: 2rem;
-    border: 2px dashed #A683E3;
+    border: 2px solid #A683E3;
 }
 
 .todo-creation h3 {
@@ -183,16 +183,22 @@ body {
 
 .input-group button {
     min-height: 50px;
-    width: 50px;
-    border-radius: 50%;
+    width: auto;
+    min-width: 120px;
+    padding: 12px 20px;
+    border-radius: 25px;
     border-color: transparent;
     background-color: #A683E3;
     color: #fff;
-    font-size: 30px;
-    padding-bottom: 6px;
+    font-size: 16px;
+    font-weight: 200;
     border-width: 0;
     cursor: pointer;
     transition: background 0.3s ease;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .input-group button:hover {
@@ -282,13 +288,18 @@ body {
 }
 
 .edit-btn, .delete-btn {
-    padding: 8px 16px;
+    padding: 10px 20px;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 14px;
     transition: all 0.3s ease;
     font-weight: 200;
+    min-width: 70px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .edit-btn {
@@ -400,14 +411,22 @@ form {
 
 button {
     min-height: 50px;
-    width: 50px;
-    border-radius: 50%;
+    width: auto;
+    min-width: 120px;
+    padding: 12px 20px;
+    border-radius: 25px;
     border-color: transparent;
     background-color: #A683E3;
     color: #fff;
-    font-size: 30px;
-    padding-bottom: 6px;
+    font-size: 16px;
+    font-weight: 200;
     border-width: 0;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 input[type="text"] {
@@ -460,6 +479,10 @@ footer {
     
     .input-group select {
         margin-bottom: 10px;
+    }
+    
+    .input-group button {
+        width: 100%;
     }
     
     .filter-buttons {
@@ -515,13 +538,14 @@ footer {
     
     .input-group button {
         min-height: 45px;
-        width: 45px;
-        font-size: 25px;
+        min-width: 100px;
+        font-size: 14px;
     }
     
     .edit-btn, .delete-btn {
-        padding: 6px 12px;
+        padding: 8px 16px;
         font-size: 0.8rem;
+        min-width: 60px;
     }
     
     .priority-badge {
