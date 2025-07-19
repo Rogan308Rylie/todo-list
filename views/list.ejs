@@ -58,11 +58,18 @@
                             <div class="item-content">
                                 <span class="priority-badge priority-<%= ejes[i].priority %>"><%= ejes[i].priority.toUpperCase() %></span>
                                 <p class="task-text"><%= ejes[i].text %></p>
+                                <% if (ejes[i].createdAt) { %>
+                                    <small class="creation-date">Created: <%= ejes[i].createdAt.toLocaleDateString() %></small>
+                                <% } %>
                             </div>
                             <div class="item-actions">
-                                <button class="edit-btn" onclick="editTask(<%= ejes[i].id %>, '<%= ejes[i].text %>', '<%= ejes[i].priority %>')">Edit</button>
-                                <form action="/delete/<%= ejes[i].id %>" method="POST" style="display: inline;">
-                                    <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                                <button class="edit-btn" onclick="editTask('<%= ejes[i]._id %>', '<%= ejes[i].text.replace(/'/g, '\\\'') %>', '<%= ejes[i].priority %>')" title="Edit Task">
+                                    ✏️
+                                </button>
+                                <form action="/delete/<%= ejes[i]._id %>" method="POST" style="display: inline;">
+                                    <button type="submit" class="delete-btn" onclick="return confirmDelete()" title="Delete Task">
+                                        🗑️
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -98,13 +105,54 @@
     </footer>
 
     <script>
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" style="float: right; background: none; border: none; font-size: 18px; cursor: pointer;">&times;</button>
+            `;
+            alertDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 5px;
+                color: white;
+                font-weight: bold;
+                z-index: 1000;
+                min-width: 250px;
+                background-color: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#ffc107'};
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                if (alertDiv.parentNode) {
+                    alertDiv.remove();
+                }
+            }, 3000);
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('updated') === 'true') {
+            showAlert('Task updated successfully!', 'success');
+        }
+        if (urlParams.get('deleted') === 'true') {
+            showAlert('Task deleted successfully!', 'success');
+        }
+        if (urlParams.get('created') === 'true') {
+            showAlert('Task created successfully!', 'success');
+        }
+
         document.getElementById('todoForm').addEventListener('submit', function(e) {
             const taskInput = document.getElementById('taskInput');
             const taskValue = taskInput.value;
             
             if (!taskValue || taskValue.trim() === '') {
                 e.preventDefault();
-                alert('Please enter a task before pressing Add Task button!');
+                showAlert('Please enter a task before adding!', 'error');
                 taskInput.focus();
                 return false;
             }
@@ -129,6 +177,10 @@
             }, 100);
         }
 
+        function confirmDelete() {
+            return confirm('Are you sure you want to delete this task? This action cannot be undone.');
+        }
+
         
         document.querySelector('.close').onclick = function() {
             document.getElementById('editModal').style.display = 'none';
@@ -148,7 +200,7 @@
             
             if (!editValue || editValue.trim() === '') {
                 e.preventDefault();
-                alert('Please enter a task before updating!');
+                showAlert('Please enter a task before updating!', 'error');
                 editInput.focus();
                 return false;
             }
